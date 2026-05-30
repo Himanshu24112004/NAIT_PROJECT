@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("");
+mongoose.connect("mongodb+srv://Himan_shu10585:1234@cluster0.kxynwat.mongodb.net/");
 
 const User = mongoose.model("User", {
   name: String
