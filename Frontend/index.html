@@ -1,118 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>HTML Elements Demo Page</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1, h2, h3 { color: darkblue; }
-    table { border-collapse: collapse; width: 60%; margin-top: 10px; }
-    table, th, td { border: 1px solid black; padding: 8px; text-align: center; }
-    form { margin-top: 20px; }
-    .highlight { background-color: yellow; }
-  </style>
 </head>
 <body>
 
-  <!-- Headings -->
-  <h1>Main Heading (H1)</h1>
-  <h2>Subheading (H2)</h2>
-  <h3>Smaller Heading (H3)</h3>
+  <div class="container">
 
-  <!-- Paragraph with formatting -->
-  <p>This is a <b>bold</b> word, this is <i>italic</i>, this is <u>underlined</u>, 
-     and this is <span class="highlight">highlighted text</span>.</p>
+    <div class="left">
+      <input type="text" id="name" placeholder="Enter name">
+      <button onclick="saveUser()">Save</button>
+    </div>
 
-  <!-- Anchor -->
-  <p>Visit <a href="https://www.example.com" target="_blank">Example.com</a> for more info.</p>
+    <div class="right">
+      <h3>Users</h3>
+      <div id="users"></div>
+    </div>
 
-  <!-- Image -->
-  <img src="https://via.placeholder.com/150" alt="Sample Image">
+  </div>
 
-  <!-- Lists -->
-  <h2>Lists</h2>
-  <p>Ordered List:</p>
-  <ol>
-    <li>First item</li>
-    <li>Second item</li>
-    <li>Third item</li>
-  </ol>
+  <script>
+    const API = "";
 
-  <p>Unordered List:</p>
-  <ul>
-    <li>Apple</li>
-    <li>Banana</li>
-    <li>Cherry</li>
-  </ul>
+    async function saveUser() {
+      const name = document.getElementById("name").value;
 
-  <p>Definition List:</p>
-  <dl>
-    <dt>HTML</dt>
-    <dd>HyperText Markup Language</dd>
-    <dt>CSS</dt>
-    <dd>Cascading Style Sheets</dd>
-  </dl>
+      await fetch(API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name })
+      });
 
-  <!-- Table -->
-  <h2>Sample Table</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Roll No</th>
-        <th>Name</th>
-        <th>Marks</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Alice</td>
-        <td>85</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Bob</td>
-        <td>90</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Charlie</td>
-        <td>78</td>
-      </tr>
-    </tbody>
-  </table>
+      document.getElementById("name").value = "";
+      loadUsers();
+    }
 
-  <!-- Form -->
-  <h2>Sample Form</h2>
-  <form action="#" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name"><br><br>
+    async function loadUsers() {
+      const res = await fetch(API);
+      const users = await res.json();
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email"><br><br>
+      document.getElementById("users").innerHTML =
+        users.map(u => `<p>${u.name}</p>`).join("");
+    }
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br><br>
-
-    <label>Gender:</label>
-    <input type="radio" id="male" name="gender" value="male"> Male
-    <input type="radio" id="female" name="gender" value="female"> Female<br><br>
-
-    <label for="country">Country:</label>
-    <select id="country" name="country">
-      <option value="india">India</option>
-      <option value="usa">USA</option>
-      <option value="uk">UK</option>
-    </select><br><br>
-
-    <label for="comments">Comments:</label><br>
-    <textarea id="comments" name="comments" rows="4" cols="40"></textarea><br><br>
-
-    <input type="checkbox" id="subscribe" name="subscribe"> Subscribe to newsletter<br><br>
-
-    <input type="submit" value="Submit">
-    <input type="reset" value="Reset">
-  </form>
+    loadUsers();
+  </script>
 
 </body>
 </html>
